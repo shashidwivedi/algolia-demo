@@ -5,17 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="theme-color" content="#000000">
-
   <link rel="shortcut icon" href="./favicon.png">
-
-  <!--
-    Do not use @8 in production, use a complete version like x.x.x, see website for latest version:
-    https://www.algolia.com/doc/guides/building-search-ui/installation/js/#load-the-styles
-  -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@8/themes/satellite-min.css">
   <link rel="stylesheet" href="./src/index.css">
   <link rel="stylesheet" href="./src/app.css">
-
   <title>algolia-demo</title>
 </head>
 
@@ -34,13 +27,15 @@
 
   <div class="container">
     <div class="search-panel">
-      <div class="search-panel__filters">
-      </div>
-
+      <div class="search-panel__filters"></div>
       <div class="search-panel__results">
         <div id="searchbox"></div>
-        <div id="hits"></div>
-        <div id="pagination"></div>
+        <h2>Brand: Incipio</h2>
+        <div id="incipio-hits"></div>
+        <div id="incipio-pagination"></div>
+        <h2>Brand: OtterBox</h2>
+        <div id="otterbox-hits"></div>
+        <div id="otterbox-pagination"></div>
       </div>
     </div>
   </div>
