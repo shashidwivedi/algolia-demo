@@ -2,17 +2,16 @@ const { algoliasearch, instantsearch } = window;
 
 const searchClient = algoliasearch(
   '6Q32KNXTM0',
-  '715528e434b28889c7b6077d834b27f0'
+  'cf8b317ecdb2a2225189ffabd6fd2425'
 );
 
-// Create the InstantSearch instance
+// main InstantSearch instance
 const search = instantsearch({
-  indexName: 'ecommerce', // Single index for both brands
+  indexName: 'ecommerce',
   searchClient,
-  routing: true,
+  routing: false,
 });
 
-// Define the shared search box widget
 const searchBox = instantsearch.widgets.searchBox({
   container: '#searchbox',
   placeholder: 'Search...',
@@ -31,16 +30,30 @@ const searchBox = instantsearch.widgets.searchBox({
   },
 });
 
-// Define the configure widgets to apply brand-specific filters
+const categoriesRefinementList = instantsearch.widgets.refinementList({
+  container: '#categories',
+  attribute: 'categories',
+  searchable: true,
+  searchablePlaceholder: 'Search categories',
+  queryHook(query, refine) {
+    // Update query for both indices
+    refine(query);
+    incipioIndex.helper.setQuery(query).search();
+    otterBoxIndex.helper.setQuery(query).search();
+  },
+});
+
+// Define configure widgets for Incipio and OtterBox
 const configureIncipio = instantsearch.widgets.configure({
   filters: 'brand:"Incipio"',
+  hitsPerPage: 8,
 });
 
 const configureOtterBox = instantsearch.widgets.configure({
   filters: 'brand:"OtterBox"',
+  hitsPerPage: 8,
 });
 
-// Instantiate hits and pagination widgets for Incipio
 const hitsIncipio = instantsearch.widgets.hits({
   container: '#incipio-hits',
   templates: {
@@ -60,7 +73,6 @@ const paginationIncipio = instantsearch.widgets.pagination({
   container: '#incipio-pagination',
 });
 
-// Instantiate hits and pagination widgets for OtterBox
 const hitsOtterBox = instantsearch.widgets.hits({
   container: '#otterbox-hits',
   templates: {
@@ -80,28 +92,33 @@ const paginationOtterBox = instantsearch.widgets.pagination({
   container: '#otterbox-pagination',
 });
 
-// Add the shared search box widget to the main search instance
 search.addWidgets([searchBox]);
+// search.addWidgets([categoriesRefinementList]);
 
-// Create the Incipio index with its own configure, hits, and pagination widgets
 const incipioIndex = instantsearch({
   indexName: 'ecommerce',
   searchClient,
   routing: true,
 });
 
-incipioIndex.addWidgets([configureIncipio, hitsIncipio, paginationIncipio]);
+incipioIndex.addWidgets([
+  configureIncipio,
+  hitsIncipio,
+  paginationIncipio,
+]);
 
-// Create the OtterBox index with its own configure, hits, and pagination widgets
 const otterBoxIndex = instantsearch({
   indexName: 'ecommerce',
   searchClient,
   routing: true,
 });
 
-otterBoxIndex.addWidgets([configureOtterBox, hitsOtterBox, paginationOtterBox]);
+otterBoxIndex.addWidgets([
+  configureOtterBox,
+  hitsOtterBox,
+  paginationOtterBox,
+]);
 
-// Start all search instances
 search.start();
 incipioIndex.start();
 otterBoxIndex.start();
